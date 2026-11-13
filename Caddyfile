@@ -1,0 +1,12 @@
+# SITE_ADDRESS lets you test locally: SITE_ADDRESS=:80 docker compose up
+{$SITE_ADDRESS:ib-2.kidsroute.ru} {
+	root * /srv
+	encode zstd gzip
+
+	# Vite puts content hashes in /assets file names, so they can be cached forever.
+	header /assets/* Cache-Control "public, max-age=31536000, immutable"
+
+	# SPA: unknown paths (/dossier, /password, ...) fall back to index.html for react-router.
+	try_files {path} /index.html
+	file_server
+}
